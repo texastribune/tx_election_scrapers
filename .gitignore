@@ -1,0 +1,4 @@
+*.pyc
+
+# fuck
+.DS_Store

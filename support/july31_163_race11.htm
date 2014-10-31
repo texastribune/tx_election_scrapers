@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html lang="en">
+<head>
+<title>2012 Democratic Party Primary Runoff - RESULTS</title>
+<noscript>
+<meta http-equiv='refresh' content="180">
+</noscript>
+<script language="JavaScript">
+<!--
+var sURL = unescape(window.location.pathname);
+var positionX;
+var positionY;
+var id;
+var s;
+var idx1;
+var idx2;
+
+function doLoad()
+{
+    // the timeout value should be the same as in the "refresh" meta-tag
+    setTimeout( "refresh()", 300*1000 );
+}
+
+function refresh()
+{
+    //  This version does NOT cause an entry in the browser's
+    //  page view history.  Most browsers will always retrieve
+    //  the document from the web-server whether it is already
+    //  in the browsers page-cache or not.
+    //  
+    positionX = document.body.scrollLeft;
+    positionY = document.body.scrollTop;
+    id = Math.random();
+    id = 1000 * id;
+    id = Math.round(id);
+    //alert ("You're at " + positionY + " pixels.");
+    window.location.replace( sURL+"?x="+positionX+"&y="+positionY+"&id="+id );
+}
+
+function ScrollSearch()
+{
+    s = window.location.search;
+    idx1 = s.indexOf("?x=");
+    if(idx1 != -1) {
+      idx2 = s.indexOf("&y=",idx1);
+      positionX = parseInt(s.substring(idx1+3,idx2));
+      positionY = parseInt(s.substring(idx2+3));
+      window.scrollTo(positionX,positionY);
+    }   
+}
+-->
+</script>
+</head>
+<body background='tempct.gif' bgproperties=fixed onload="doLoad();ScrollSearch();">
+<h2 align=center>Office of the Secretary of State</h2>
+<h2 align=center>2012 Democratic Party Primary Runoff</h2>
+<h2 align=center>Election Night Returns</h2><br>
+<form method=post>
+<center>
+ 
+<H3 ALIGN=center>7/31/2012  9:29:43 PM</H3>
+<FONT SIZE=2>
+<H  ALIGN=center><B><center>Our election night returns are updated every five minutes.<br>This page refreshes every three minutes, or you may click on the "Refresh" or "Reload" button in order to get the current results.</center></B></H ><BR>
+<H3 ALIGN=left>State Representative District 137</H3>
+<TABLE BORDER=1>
+<TR><TH COLSPAN=1>...</TH><TH COLSPAN=1>Jamaal R.</TH><TH COLSPAN=1>Gene</TH><TH COLSPAN=1>...</TH><TH COLSPAN=1>...</TH><TH COLSPAN=1>...</TH></TR>
+<TR><TH COLSPAN=1>County</TH><TH COLSPAN=1>Smith</TH><TH COLSPAN=1>Wu</TH><TH COLSPAN=1>Total</TH><TH COLSPAN=1>Precincts</TH><TH COLSPAN=1>Total</TH></TR>
+<TR><TH>...</TH><TH>DEM</TH><TH>DEM</TH><TH>Votes</TH><TH>Reported</TH><TH>Precincts</TH></TR>
+<TR ALIGN=right><TD ALIGN=left><A HREF='july31_163_county100.htm'>HARRIS</A></TD><TD>214</TD><TD>449</TD><TD>663</TD><TD>0</TD><TD>28</TD></TR>
+<tr align=right><td><b>Early</b></td><td>214</td><td>449</td><td>663</td><td>...</td><td>...</td></tr>
+</TABLE>
+</center>
+</form>
+<hr>
+
+<h4 align=center>
+<a href="http://www.sos.state.tx.us/elections/index.shtml"><font face="Schneidler BT">Elections
+Home Page</font></a>
+<a href="http://www.sos.state.tx.us"><font face="Schneidler BT">SOS
+Home Page</font></a></h4>
+
+<h5 align="center">For comments or suggestions, please e-mail <a
+href="mailto:webmaster@sos.state.tx.us">webmaster@sos.state.tx.us</a><a
+href="mailto:webmaster@sos.state.tx.us"></h5</p></a> </h5>
+</body>
+</html>
