@@ -8,6 +8,9 @@ Usage:
 from __future__ import unicode_literals
 
 from lxml.html import document_fromstring
+import codecs
+import cStringIO
+import csv
 
 import sys
 
@@ -32,6 +35,36 @@ class Bucket(list):
             self.advance()
 
 
+class UnicodeWriter:
+    """
+    A CSV writer which will write rows to CSV file "f",
+    which is encoded in the given encoding.
+    """
+
+    def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):
+        # Redirect output to a queue
+        self.queue = cStringIO.StringIO()
+        self.writer = csv.writer(self.queue, dialect=dialect, **kwds)
+        self.stream = f
+        self.encoder = codecs.getincrementalencoder(encoding)()
+
+    def writerow(self, row):
+        self.writer.writerow([s.encode("utf-8") for s in row])
+        # Fetch UTF-8 output from the queue ...
+        data = self.queue.getvalue()
+        data = data.decode("utf-8")
+        # ... and reencode it into the target encoding
+        data = self.encoder.encode(data)
+        # write to the target stream
+        self.stream.write(data)
+        # empty queue
+        self.queue.truncate(0)
+
+    def writerows(self, rows):
+        for row in rows:
+            self.writerow(row)
+
+
 def bundle_races(doc):
     rows = doc.xpath('.//tr')
 
@@ -47,13 +80,30 @@ def bundle_races(doc):
         else:
             races.drip(row)
 
-    for race in races:
-        print race[0].text_content()
-
     return races
+
+
+def process_race(race):
+    race_name = race[0].text_content()
+    results = []
+    for rows in race[1:-2]:  # we don't care about the last two rows
+        result = [race_name]
+        result.extend([x.text.strip() for x in rows.getchildren()[1:]])
+        results.append(result)
+    return results
+
+
+def output_races(races):
+    writer = UnicodeWriter(sys.stdout)
+    for race in races:
+        writer.writerow(race)
 
 
 if __name__ == '__main__':
     html_file = sys.stdin.read()
     doc = document_fromstring(html_file)
     races = bundle_races(doc)
+    results = []
+    for race in races:
+        results.extend(process_race(race))
+    output_races(results)
