@@ -86,9 +86,13 @@ def bundle_races(doc):
 def process_race(race):
     race_name = race[0].text_content()
     results = []
-    for rows in race[1:-2]:  # we don't care about the last two rows
-        result = [race_name]
-        result.extend([x.text.strip() for x in rows.getchildren()[1:]])
+    for row in race[1:]:
+        cells = row.getchildren()
+        if '----' in cells[4].text:
+            # ignore aggregate race results
+            break
+        result = [race_name]  # denormalize race name into every result
+        result.extend([x.text.strip() for x in cells[1:]])
         results.append(result)
     return results
 
