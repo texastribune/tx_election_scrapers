@@ -88,7 +88,7 @@ def process_race(race):
     results = []
     for row in race[1:]:
         cells = row.getchildren()
-        if '----' in cells[4].text:
+        if '----' in cells[-2].text:
             # ignore aggregate race results
             break
         result = [race_name]  # denormalize race name into every result
@@ -103,11 +103,15 @@ def output_races(races):
         writer.writerow(race)
 
 
-if __name__ == '__main__':
-    html_file = sys.stdin.read()
+def process(fh):
+    html_file = fh.read()
     doc = document_fromstring(html_file)
     races = bundle_races(doc)
     results = []
     for race in races:
         results.extend(process_race(race))
     output_races(results)
+
+
+if __name__ == '__main__':
+    process(sys.stdin)
