@@ -7,9 +7,10 @@ Usage:
 """
 from __future__ import unicode_literals
 
-from lxml.html import document_fromstring
 import json
 import sys
+
+from lxml.html import document_fromstring
 
 
 def groupby_by_two(iterable):
