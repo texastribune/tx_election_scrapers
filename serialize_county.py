@@ -29,7 +29,23 @@ def county_to_cells(county):
     return [x.getchildren() for x in county]
 
 
-def process_county(county, candidates):
+def process_county_historical(county, candidates):
+    data = county.getchildren()
+    name = data[0].text_content()
+    results = {}
+    for idx, candidate in enumerate(candidates, start=1):
+        results[candidate] = data[idx].text_content()
+
+    return {
+        'name': name,
+        'total_votes': data[-3].text_content(),
+        'registered_voters': data[-2].text_content(),
+        'turnout': data[-1].text_content(),
+        'results': results,
+    }
+
+
+def process_county_realtime(county, candidates):
     data = county_to_cells(county)
     name = data[0][0].text_content()
     results = {}
@@ -54,24 +70,35 @@ def process_county(county, candidates):
 
 
 def process_race(doc):
+    h2s = doc.xpath('//h2')
     h3s = doc.xpath('//h3')
     rows = doc.xpath('//tr')
 
     # metadata
-    election = doc.xpath('//h2[2]')[0].text
+    election = h2s[1].text
     updated_at = h3s[0].text
-    race_name = h3s[1].text
+    try:
+        race_name = h3s[1].text
+        is_historical = False
+    except IndexError:
+        race_name = ''.join(doc.xpath('//form/text()')).strip()
+        is_historical = True
 
     # candidates
     first_names = [x.text for x in rows[0].getchildren()[1:-6]]  # non-surname
     surnames = [x.text for x in rows[1].getchildren()[1:-6]]
+    # TODO get party in rows[2]
     candidates_names_split = zip(first_names, surnames)
     candidates_names = [' '.join(x) for x in candidates_names_split]
 
     # group rows by two for each "county"
     county_data = []
-    for county in groupby_by_two(rows[3:]):
-        county_data.append(process_county(county, candidates_names))
+    if is_historical:
+        for county in rows[3:]:
+            county_data.append(process_county_historical(county, candidates_names))
+    else:
+        for county in groupby_by_two(rows[3:]):
+            county_data.append(process_county_realtime(county, candidates_names))
 
     return {
         'election': election,
