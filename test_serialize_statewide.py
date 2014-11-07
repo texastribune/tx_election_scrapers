@@ -5,7 +5,7 @@ import unittest
 
 import mock
 
-import serialize
+import serialize_statewide
 
 
 BASE_DIR = os.path.dirname(__file__)
@@ -14,24 +14,24 @@ BASE_DIR = os.path.dirname(__file__)
 class HistoricalStatewideSummaryTest(unittest.TestCase):
     def test_bundle_races_works(self):
         html_file = open(os.path.join(BASE_DIR, 'support/2012-general.html')).read()
-        doc = serialize.document_fromstring(html_file)
-        races = serialize.bundle_races(doc)
+        doc = serialize_statewide.document_fromstring(html_file)
+        races = serialize_statewide.bundle_races(doc)
         self.assertEqual(len(races), 584)
 
     def test_process_races_works_historical(self):
         html_file = open(os.path.join(BASE_DIR, 'support/2012-general.html')).read()
-        doc = serialize.document_fromstring(html_file)
-        races = serialize.bundle_races(doc)
-        race = serialize.process_race(races[0])
+        doc = serialize_statewide.document_fromstring(html_file)
+        races = serialize_statewide.bundle_races(doc)
+        race = serialize_statewide.process_race(races[0])
         self.assertEqual(race['name'], 'President/Vice-President')
         self.assertEqual(len(race['data']), 11)
         self.assertEqual(len(race['metadata']), 1)
 
     def test_process_races_works_realtime(self):
         html_file = open(os.path.join(BASE_DIR, 'support/may29_160_state.htm')).read()
-        doc = serialize.document_fromstring(html_file)
-        races = serialize.bundle_races(doc)
-        race = serialize.process_race(races[0])
+        doc = serialize_statewide.document_fromstring(html_file)
+        races = serialize_statewide.bundle_races(doc)
+        race = serialize_statewide.process_race(races[0])
         self.assertEqual(race['name'], 'President/Vice-President')
         self.assertEqual(len(race['data']), 9)
         self.assertEqual(len(race['metadata']), 5)
@@ -40,7 +40,7 @@ class HistoricalStatewideSummaryTest(unittest.TestCase):
     @mock.patch('sys.stdout')
     def test_it_works(self, mock_out):
         fh = open(os.path.join(BASE_DIR, 'support/2012-general.html'))
-        serialize.process(fh)
+        serialize_statewide.process(fh)
         self.assertEqual(mock_out.write.call_count, 938)
 
 
@@ -49,7 +49,7 @@ class RealtimeStatewideSummaryTest(unittest.TestCase):
     @mock.patch('sys.stdout')
     def test_it_works(self, mock_out):
         fh = open(os.path.join(BASE_DIR, 'support/may29_160_state.htm'))
-        serialize.process(fh)
+        serialize_statewide.process(fh)
         self.assertEqual(mock_out.write.call_count, 669)
 
 

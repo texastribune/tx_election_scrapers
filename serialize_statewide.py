@@ -2,8 +2,8 @@
 # -*- coding: UTF-8 -*-
 """
 Usage:
-  curl ... | ./serialize.py
-  cat support/example.html | ./serialize.py
+  curl ... | ./serialize_statewide.py
+  cat support/example.html | ./serialize_statewide.py
 """
 from __future__ import unicode_literals
 
