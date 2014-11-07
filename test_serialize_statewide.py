@@ -13,13 +13,13 @@ BASE_DIR = os.path.dirname(__file__)
 
 class HistoricalStatewideSummaryTest(unittest.TestCase):
     def test_bundle_races_works(self):
-        html_file = open(os.path.join(BASE_DIR, 'support/2012-general.html')).read()
+        html_file = open(os.path.join(BASE_DIR, 'support/2012_general.html')).read()
         doc = serialize_statewide.document_fromstring(html_file)
         races = serialize_statewide.bundle_races(doc)
         self.assertEqual(len(races), 584)
 
     def test_process_races_works_historical(self):
-        html_file = open(os.path.join(BASE_DIR, 'support/2012-general.html')).read()
+        html_file = open(os.path.join(BASE_DIR, 'support/2012_general.html')).read()
         doc = serialize_statewide.document_fromstring(html_file)
         races = serialize_statewide.bundle_races(doc)
         race = serialize_statewide.process_race(races[0])
@@ -39,7 +39,7 @@ class HistoricalStatewideSummaryTest(unittest.TestCase):
     @unittest.skip('maybe later')
     @mock.patch('sys.stdout')
     def test_it_works(self, mock_out):
-        fh = open(os.path.join(BASE_DIR, 'support/2012-general.html'))
+        fh = open(os.path.join(BASE_DIR, 'support/2012_general.html'))
         serialize_statewide.process(fh)
         self.assertEqual(mock_out.write.call_count, 938)
 

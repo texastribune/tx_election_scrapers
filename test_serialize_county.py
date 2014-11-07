@@ -11,7 +11,7 @@ BASE_DIR = os.path.dirname(__file__)
 
 class RealtimeCountyTest(unittest.TestCase):
     def test_it_works(self):
-        html_file = open(os.path.join(BASE_DIR, 'support/july31_162_race0.htm')).read()
+        html_file = open(os.path.join(BASE_DIR, 'support/july31_162_race0_county.htm')).read()
         doc = serialize_county.document_fromstring(html_file)
         race = serialize_county.process_race(doc)
         self.assertEqual(race['type'], 'realtime')
