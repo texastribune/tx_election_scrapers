@@ -1,2 +1,3 @@
 test:
-	python test_to_csv.py
+	@$(foreach file, $(wildcard test_*.py), \
+	  python $(file) && ) true

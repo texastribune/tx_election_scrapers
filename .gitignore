@@ -2,3 +2,8 @@
 
 # fuck
 .DS_Store
+
+
+# debugging helpers
+*.ipynb
+.ipynb_checkpoints/
