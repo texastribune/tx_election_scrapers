@@ -84,12 +84,14 @@ def process_race(doc):
         race_name = ''.join(doc.xpath('//form/text()')).strip()
         is_historical = True
 
+    extra_cols = 3 if is_historical else 6
+
     # candidates
-    first_names = [x.text for x in rows[0].getchildren()[1:-6]]  # non-surname
-    surnames = [x.text for x in rows[1].getchildren()[1:-6]]
-    # TODO get party in rows[2]
-    candidates_names_split = zip(first_names, surnames)
-    candidates_names = [' '.join(x) for x in candidates_names_split]
+    first_names = [x.text for x in rows[0].getchildren()[1:-extra_cols]]  # non-surname
+    surnames = [x.text for x in rows[1].getchildren()[1:-extra_cols]]
+    parties = [x.text for x in rows[2].getchildren()[1:-extra_cols]]
+    candidates = [{'name': x[:2], 'party': x[2]} for x in zip(first_names, surnames, parties)]
+    candidates_names = [' '.join(x) for x in zip(first_names, surnames)]
 
     # group rows by two for each "county"
     county_data = []
@@ -104,7 +106,7 @@ def process_race(doc):
         'election': election,
         'updated_at': updated_at,
         'name': race_name,
-        'candidates': candidates_names_split,
+        'candidates': candidates,
         'data': county_data,
         'type': 'historical' if is_historical else 'realtime',
     }
