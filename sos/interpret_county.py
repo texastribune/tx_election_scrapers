@@ -25,6 +25,7 @@ from pprint import pprint
 from docopt import docopt
 
 from fips import FIPS
+from utils import slugify
 
 
 INT_FIELDS = [
