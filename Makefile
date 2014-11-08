@@ -1,3 +1,3 @@
 test:
-	@$(foreach file, $(wildcard test_*.py), \
+	@$(foreach file, $(wildcard sos/test_*.py), \
 	  python $(file) && ) true
