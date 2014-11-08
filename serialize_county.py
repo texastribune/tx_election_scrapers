@@ -66,7 +66,7 @@ def process_county_realtime(county, candidates):
         'precincts_reported': data[0][-2].text,
         'precincts_total': data[0][-1].text,
         'results': results,
-        'early_results': results,
+        'results_early': results,
     }
 
 
