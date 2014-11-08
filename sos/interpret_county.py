@@ -5,7 +5,7 @@ Usage:
   ./interpret_county.py [options]
 
 Options:
-  --slugify  Slugify politician names
+  --slugify  Slugify candidate names
 
 Interprets and transforms results from stdin to make it easier for other
 scripts to consume.
@@ -48,21 +48,27 @@ def coerce_types(obj):
             obj[k] = int(v.replace(',', ''))
 
 
-def coerce_votes(obj):
+def coerce_votes(obj, make_slugs=False):
     """Modifies dict in-place to coerce values."""
-    return {k: int(v.replace(',', '')) for k, v in obj.items()}
+    # this logic is kind of stupid, but it'll need to be replaced soon anyways
+    # once slug transformations happen
+    if make_slugs:
+        return {slugify(k): int(v.replace(',', '')) for k, v in obj.items()}
+    else:
+        return {k: int(v.replace(',', '')) for k, v in obj.items()}
 
 
 if __name__ == '__main__':
     arguments = docopt(__doc__)
+    make_slugs = arguments['--slugify']
     data = json.load(sys.stdin)
     for result in data['data']:
         voting_results = result.pop('results')
         results_early = result.pop('results_early', None)
         coerce_types(result)
-        result['results'] = coerce_votes(voting_results)
+        result['results'] = coerce_votes(voting_results, make_slugs)
         if results_early is not None:
-            result['results_early'] = coerce_votes(results_early)
+            result['results_early'] = coerce_votes(results_early, make_slugs)
 
         # new data
         fips_key = result['name'].replace(' ', '')
