@@ -21,6 +21,9 @@ Expects JSON from serialize_county.py.
 Examples:
   cat support/july31_162_race0_county.htm | ./serialize_county.py | ./interpret_county.py
   cat support/2014_special_sd28_county.html | ./serialize_county.py | ./interpret_county.py
+  curl -X POST --data "election=2014+Republican+Party+Primary+Election&lboRace=U.+S.+Senator" \
+    http://elections.sos.state.tx.us/elchist.exe | ./serialize_county.py | \
+    ./interpret_county.py --indent=2
 """
 from __future__ import unicode_literals
 
@@ -58,12 +61,26 @@ def coerce_types(obj):
 
 def coerce_votes(obj, make_slugs=False):
     """Modifies dict in-place to coerce values."""
+    def int_ish(numeric_maybe):
+        """
+        HACK quick fix for getting empty things instead of a numeric string
+
+        >>> int_ish('')
+        None
+        >>> int_ish('0')
+        0
+        >>> int_ish('1337')
+        1337
+        """
+        if numeric_maybe == '':
+            return None
+        return int(numeric_maybe)
     # this logic is kind of stupid, but it'll need to be replaced soon anyways
     # once slug transformations happen
     if make_slugs:
-        return {slugify(k): int(v.replace(',', '')) for k, v in obj.items()}
+        return {slugify(k): int_ish(v.replace(',', '')) for k, v in obj.items()}
     else:
-        return {k: int(v.replace(',', '')) for k, v in obj.items()}
+        return {k: int_ish(v.replace(',', '')) for k, v in obj.items()}
 
 
 def interpret(data):
