@@ -63,6 +63,13 @@ if __name__ == '__main__':
     arguments = docopt(__doc__)
     make_slugs = arguments['--slugify']
     data = json.load(sys.stdin)
+
+    # interpret data['candidates']
+    for candidate in data['candidates']:
+        # modify in place, always set a slug irregardless of `make_slugs`
+        candidate['slug'] = slugify(' '.join(candidate['name']))
+
+    # interpret data['data']
     for result in data['data']:
         voting_results = result.pop('results')
         results_early = result.pop('results_early', None)
