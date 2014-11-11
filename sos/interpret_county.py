@@ -22,11 +22,13 @@ from __future__ import unicode_literals
 import json
 import sys
 
-from pprint import pprint
 from docopt import docopt
 
 from fips import FIPS
 from utils import slugify
+
+
+make_slugs = False
 
 
 INT_FIELDS = [
@@ -59,11 +61,8 @@ def coerce_votes(obj, make_slugs=False):
         return {k: int(v.replace(',', '')) for k, v in obj.items()}
 
 
-if __name__ == '__main__':
-    arguments = docopt(__doc__)
-    make_slugs = arguments['--slugify']
-    data = json.load(sys.stdin)
-
+def interpret(data):
+    """Modify `data` in place according to `options`."""
     # interpret data['candidates']
     for candidate in data['candidates']:
         # modify in place, always set a slug irregardless of `make_slugs`
@@ -84,5 +83,21 @@ if __name__ == '__main__':
             row['fips'] = FIPS[fips_key]
         else:
             row['fips'] = None
-    indent_amount = arguments['--indent'] and int(arguments['--indent'])
+    return data
+
+
+def main():
+    global make_slugs  # XXX evil
+    options = docopt(__doc__)
+    make_slugs = options['--slugify']
+
+    data = json.load(sys.stdin)
+    interpret(data)
+
+    # output
+    indent_amount = options['--indent'] and int(options['--indent'])
     json.dump(data, sys.stdout, indent=indent_amount)
+
+
+if __name__ == '__main__':
+    main()
