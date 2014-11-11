@@ -5,7 +5,8 @@ Usage:
   ./interpret_county.py [options]
 
 Options:
-  --slugify  Slugify candidate names
+  --slugify     Slugify candidate names
+  --indent=<n>  Indent JSON
 
 Interprets and transforms results from stdin to make it easier for other
 scripts to consume.
@@ -76,4 +77,5 @@ if __name__ == '__main__':
             result['fips'] = FIPS[fips_key]
         else:
             result['fips'] = None
-        pprint(result)
+    indent_amount = arguments['--indent'] and int(arguments['--indent'])
+    json.dump(data, sys.stdout, indent=indent_amount)
