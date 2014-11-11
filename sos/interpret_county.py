@@ -69,20 +69,20 @@ if __name__ == '__main__':
         # modify in place, always set a slug irregardless of `make_slugs`
         candidate['slug'] = slugify(' '.join(candidate['name']))
 
-    # interpret data['data']
-    for result in data['data']:
-        voting_results = result.pop('results')
-        results_early = result.pop('results_early', None)
-        coerce_types(result)
-        result['results'] = coerce_votes(voting_results, make_slugs)
+    # interpret data['rows']
+    for row in data['rows']:
+        voting_results = row.pop('results')
+        results_early = row.pop('results_early', None)
+        coerce_types(row)
+        row['results'] = coerce_votes(voting_results, make_slugs)
         if results_early is not None:
-            result['results_early'] = coerce_votes(results_early, make_slugs)
+            row['results_early'] = coerce_votes(results_early, make_slugs)
 
         # new data
-        fips_key = result['name'].replace(' ', '')
+        fips_key = row['name'].replace(' ', '')
         if fips_key in FIPS:
-            result['fips'] = FIPS[fips_key]
+            row['fips'] = FIPS[fips_key]
         else:
-            result['fips'] = None
+            row['fips'] = None
     indent_amount = arguments['--indent'] and int(arguments['--indent'])
     json.dump(data, sys.stdout, indent=indent_amount)
