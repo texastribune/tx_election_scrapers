@@ -9,7 +9,12 @@ Options:
   --indent=<n>  Indent JSON
 
 Interprets and transforms results from stdin to make it easier for other
-scripts to consume.
+scripts to consume. What this does:
+
+* shows FIPS for each county
+* cleans numeric values to be numbers
+* normalizes missing data to `null` value
+* (optional) Show candidate names as computer friendly slugs
 
 Expects JSON from serialize_county.py.
 
