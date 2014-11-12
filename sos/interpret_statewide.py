@@ -37,8 +37,10 @@ def interpret(data):
     data['slug'] = slugify(data['election'])
     rows = data['rows']
 
-    # TODO only works for realtime
-    result_keys = ('name', 'party', 'votes_early', 'percent_early', 'votes', 'percent')
+    result_keys = {
+        'realtime': ('name', 'party', 'votes_early', 'percent_early', 'votes', 'percent'),
+        'historical': ('name', 'party', 'votes', 'percent'),
+    }
     for race in rows:
         race['slug'] = slugify(race['name'])
         new_results = []
@@ -46,6 +48,7 @@ def interpret(data):
         # candidate results
         for result in race['data']:
             candidate_result = dict(zip(result_keys, result))
+            print candidate_result
             name = candidate_result['name']
             if INCUMBENT_PATTERN.search(name):
                 name = INCUMBENT_PATTERN.sub('', name)
@@ -53,7 +56,6 @@ def interpret(data):
                 candidate_result['incumbent'] = True
             else:
                 candidate_result['incumbent'] = False
-            # TODO get incumbent status
             candidate_result['slug'] = slugify(candidate_result['name'])
             candidate_result['votes'] = int_ish(candidate_result['votes'])
             candidate_result['votes_early'] = int_ish(candidate_result['votes_early'])

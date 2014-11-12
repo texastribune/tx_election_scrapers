@@ -60,6 +60,7 @@ def get_meta(doc):
     return {
         'election': election,
         'updated_at': updated_at,
+        'type': 'realtime' if ':' in updated_at else 'historical',
     }
 
 
