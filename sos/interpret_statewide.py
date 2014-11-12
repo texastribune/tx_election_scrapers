@@ -5,7 +5,6 @@ Usage:
   ./interpret_statewide.py [options]
 
 Options:
-  --slugify     Slugify candidate names
   --indent=<n>  Indent JSON
 
 Interprets and transforms results to make it easier for other scripts to
@@ -22,13 +21,10 @@ from __future__ import unicode_literals
 import json
 import re
 import sys
-from pprint import pprint
 
 from docopt import docopt
 from utils import int_ish, slugify
 
-
-make_slugs = False
 
 INCUMBENT_PATTERN = re.compile(r'\s(\-\s|\()Incumbent\)?|\(I\)$')
 
@@ -102,10 +98,8 @@ def main():
     interpret(data)
 
     # pprint(rows)
-    json.dump(data, sys.stdout, indent=2)
-
-    global make_slugs  # XXX evil
-    make_slugs = options['--slugify']
+    indent_amount = options['--indent'] and int(options['--indent'])
+    json.dump(data, sys.stdout, indent=indent_amount)
 
 
 if __name__ == '__main__':
