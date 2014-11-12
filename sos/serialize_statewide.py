@@ -60,11 +60,11 @@ def process_race(race):
     in_meta = False
     for row in race[1:]:
         cells = row.getchildren()
-        datum = [x.text.strip() for x in cells if x is not None and x.text]
+        datum = [x.text_content().strip() for x in cells[1:]]
         if in_meta:
-            meta_data.append(datum)
+            meta_data.append(datum[1:])  # has an extra padding TD
             continue
-        if '----' in datum[0]:
+        if '----' in ''.join(datum):
             in_meta = True
             continue
         tabular_data.append(datum)
