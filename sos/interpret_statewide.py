@@ -20,6 +20,7 @@ Sample:
 from __future__ import unicode_literals
 
 import json
+import re
 import sys
 from pprint import pprint
 
@@ -28,6 +29,8 @@ from utils import int_ish, slugify
 
 
 make_slugs = False
+
+INCUMBENT_PATTERN = re.compile(r'\s(\-\s|\()Incumbent\)?|\(I\)$')
 
 
 def main():
@@ -42,6 +45,13 @@ def main():
         # candidate results
         for result in race['data']:
             candidate_result = dict(zip(result_keys, result))
+            name = candidate_result['name']
+            if INCUMBENT_PATTERN.search(name):
+                name = INCUMBENT_PATTERN.sub('', name)
+                candidate_result['name'] = name
+                candidate_result['incumbent'] = True
+            else:
+                candidate_result['incumbent'] = False
             # TODO get incumbent status
             candidate_result['slug'] = slugify(candidate_result['name'])
             candidate_result['votes'] = int_ish(candidate_result['votes'])
