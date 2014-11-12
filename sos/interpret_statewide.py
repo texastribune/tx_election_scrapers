@@ -35,11 +35,15 @@ INCUMBENT_PATTERN = re.compile(r'\s(\-\s|\()Incumbent\)?|\(I\)$')
 
 def main():
     options = docopt(__doc__)
-    rows = json.load(sys.stdin)
+    data = json.load(sys.stdin)
+
+    data['slug'] = slugify(data['election'])
+    rows = data['rows']
 
     # TODO only works for realtime
     result_keys = ('name', 'party', 'votes_early', 'percent_early', 'votes', 'percent')
     for race in rows:
+        race['slug'] = slugify(race['name'])
         new_results = []
 
         # candidate results
@@ -87,7 +91,7 @@ def main():
         race['data'] = new_results
 
     # pprint(rows)
-    json.dump(rows, sys.stdout, indent=2)
+    json.dump(data, sys.stdout, indent=2)
 
     global make_slugs  # XXX evil
     make_slugs = options['--slugify']
