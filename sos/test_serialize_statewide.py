@@ -16,6 +16,20 @@ class StatewideSummaryTest(unittest.TestCase):
         races = serialize_statewide.bundle_races(doc)
         self.assertEqual(len(races), 584)
 
+    def test_get_meta_works_historical(self):
+        html_file = open(os.path.join(BASE_DIR, 'support/2012_general.html')).read()
+        doc = serialize_statewide.document_fromstring(html_file)
+        meta = serialize_statewide.get_meta(doc)
+        self.assertEqual(meta['election'], '2012 General Election')
+        self.assertIn('11/6/2012', meta['updated_at'])
+
+    def test_get_meta_works_realtime(self):
+        html_file = open(os.path.join(BASE_DIR, 'support/may29_160_state.htm')).read()
+        doc = serialize_statewide.document_fromstring(html_file)
+        meta = serialize_statewide.get_meta(doc)
+        self.assertEqual(meta['election'], '2012 Republican Party Primary Election')
+        self.assertIn('5/23/2012  12:57:00 PM', meta['updated_at'])
+
     def test_process_races_works_historical(self):
         html_file = open(os.path.join(BASE_DIR, 'support/2012_general.html')).read()
         doc = serialize_statewide.document_fromstring(html_file)

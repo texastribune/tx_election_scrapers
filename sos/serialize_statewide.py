@@ -52,6 +52,17 @@ def bundle_races(doc):
     return races
 
 
+def get_meta(doc):
+    h2s = doc.xpath('//h2')
+    h3s = doc.xpath('//h3')
+    election = h2s[1].text
+    updated_at = h3s[-1].text
+    return {
+        'election': election,
+        'updated_at': updated_at,
+    }
+
+
 def process_race(race):
     """Extract meaning from a collection of TR elements about a race."""
     race_name = race[0].text_content()
@@ -88,7 +99,10 @@ def process(fh):
     results = []
     for race in races:
         results.append(process_race(race))
-    output_races(results)
+    data = get_meta(doc)
+    data['total_rows'] = len(results)
+    data['rows'] = results
+    output_races(data)
 
 
 if __name__ == '__main__':
