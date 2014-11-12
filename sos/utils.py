@@ -10,7 +10,10 @@ def slugify(text):
 
     Reference: https://github.com/django/django/blob/stable/1.7.x/django/utils/text.py
     """
-    text = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode('ascii')
+    try:
+        text = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode('ascii')
+    except TypeError:  # `text` was not unicode to begin with
+        pass
     text = re.sub('[^\w\s-]', '', text).strip().lower()
     return re.sub('[-\s]+', '-', text)
 

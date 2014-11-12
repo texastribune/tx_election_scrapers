@@ -92,7 +92,7 @@ def output_races(races):
     # writer = UnicodeWriter(sys.stdout)
 
 
-def process(fh):
+def process(fh, outputter=output_races):
     html_file = fh.read()
     doc = document_fromstring(html_file)
     races = bundle_races(doc)
@@ -102,7 +102,8 @@ def process(fh):
     data = get_meta(doc)
     data['total_rows'] = len(results)
     data['rows'] = results
-    output_races(data)
+    outputter(data)
+    return data
 
 
 if __name__ == '__main__':

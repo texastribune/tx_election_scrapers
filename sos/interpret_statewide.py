@@ -33,10 +33,7 @@ make_slugs = False
 INCUMBENT_PATTERN = re.compile(r'\s(\-\s|\()Incumbent\)?|\(I\)$')
 
 
-def main():
-    options = docopt(__doc__)
-    data = json.load(sys.stdin)
-
+def interpret(data):
     data['slug'] = slugify(data['election'])
     rows = data['rows']
 
@@ -89,6 +86,13 @@ def main():
             race['metadata'] = metadata
 
         race['data'] = new_results
+    return data
+
+
+def main():
+    options = docopt(__doc__)
+    data = json.load(sys.stdin)
+    interpret(data)
 
     # pprint(rows)
     json.dump(data, sys.stdout, indent=2)
