@@ -108,7 +108,7 @@ def process_race(doc):
         'updated_at': updated_at,
         'name': race_name,
         'candidates': candidates,
-        'data': county_data,
+        'rows': county_data,
         'type': 'historical' if is_historical else 'realtime',
     }
 

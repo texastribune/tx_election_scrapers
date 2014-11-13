@@ -21,7 +21,7 @@ class RealtimeCountyTest(unittest.TestCase):
         self.assertEqual(race['candidates'][0],
             {'name': ('Ted', 'Cruz'), 'party': 'REP'})
         self.assertEqual(len(race['candidates']), 2)
-        self.assertEqual(len(race['data']), 255)  # 254 + statewide summary
+        self.assertEqual(len(race['rows']), 255)  # 254 + statewide summary
 
 
 class HistoricalCountyTest(unittest.TestCase):
@@ -36,7 +36,7 @@ class HistoricalCountyTest(unittest.TestCase):
         self.assertEqual(race['candidates'][0],
             {'name': ('Jodey', 'Arrington'), 'party': 'REP'})
         self.assertEqual(len(race['candidates']), 6)
-        self.assertEqual(len(race['data']), 52)
+        self.assertEqual(len(race['rows']), 52)
 
 
 if __name__ == '__main__':
