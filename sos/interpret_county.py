@@ -5,7 +5,6 @@ Usage:
   ./interpret_county.py [options]
 
 Options:
-  --slugify     Slugify candidate names
   --indent=<n>  Indent JSON
 
 Interprets and transforms results from stdin to make it easier for other
@@ -33,10 +32,7 @@ import sys
 from docopt import docopt
 
 from fips import FIPS
-from utils import slugify
-
-
-make_slugs = False
+from utils import slugify, int_ish
 
 
 INT_FIELDS = [
@@ -59,35 +55,24 @@ def coerce_types(obj):
             obj[k] = int(v.replace(',', ''))
 
 
-def coerce_votes(obj, make_slugs=False):
-    """Modifies dict in-place to coerce values."""
-    def int_ish(numeric_maybe):
-        """
-        HACK quick fix for getting empty things instead of a numeric string
-
-        >>> int_ish('')
-        None
-        >>> int_ish('0')
-        0
-        >>> int_ish('1337')
-        1337
-        """
-        if numeric_maybe == '':
-            return None
-        return int(numeric_maybe)
-    # this logic is kind of stupid, but it'll need to be replaced soon anyways
-    # once slug transformations happen
-    if make_slugs:
-        return {slugify(k): int_ish(v.replace(',', '')) for k, v in obj.items()}
-    else:
-        return {k: int_ish(v.replace(',', '')) for k, v in obj.items()}
+def coerce_votes(obj):
+    """Changes CSV-like dict to a list of results and coerce values."""
+    new_results = []
+    for name, count in obj.items():
+        new_results.append({
+            'name': name,
+            'slug': slugify(name),
+            'votes': int_ish(count)
+        })
+    new_results.sort(key=lambda x: x['votes'], reverse=True)
+    return new_results
 
 
 def interpret(data):
     """Modify `data` in place according to `options`."""
     # interpret data['candidates']
     for candidate in data['candidates']:
-        # modify in place, always set a slug irregardless of `make_slugs`
+        # modify in place
         candidate['slug'] = slugify(' '.join(candidate['name']))
 
     # interpret data['rows']
@@ -95,9 +80,9 @@ def interpret(data):
         voting_results = row.pop('results')
         results_early = row.pop('results_early', None)
         coerce_types(row)
-        row['results'] = coerce_votes(voting_results, make_slugs)
+        row['results'] = coerce_votes(voting_results)
         if results_early is not None:
-            row['results_early'] = coerce_votes(results_early, make_slugs)
+            row['results_early'] = coerce_votes(results_early)
 
         # new data
         fips_key = row['name'].replace(' ', '')
@@ -109,9 +94,7 @@ def interpret(data):
 
 
 def main():
-    global make_slugs  # XXX evil
     options = docopt(__doc__)
-    make_slugs = options['--slugify']
 
     data = json.load(sys.stdin)
     interpret(data)
