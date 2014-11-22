@@ -70,6 +70,8 @@ def coerce_votes(obj):
 
 def interpret(data):
     """Modify `data` in place according to `options`."""
+    data['election_slug'] = slugify(data['election'])
+    data['slug'] = slugify(data['name'])
     # interpret data['candidates']
     for candidate in data['candidates']:
         # modify in place
