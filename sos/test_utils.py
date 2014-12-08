@@ -3,7 +3,49 @@ from __future__ import unicode_literals
 import unittest
 
 
-from utils import slugify
+from utils import slugify, corrected
+import utils
+
+
+class correctedTest(unittest.TestCase):
+    def test_it_works(self):
+        utils._corrections_cache = {
+            'all': {
+                'a0': 'a1',
+            },
+            'foo': {
+                'a0': 'a2',
+            },
+            'bar': {
+                'a0': 'a3',
+            },
+        }
+        self.assertEqual(corrected('a0'), 'a1')
+        self.assertEqual(corrected('missing'), 'missing')
+        self.assertEqual(corrected('a0', 'foo'), 'a2')
+        self.assertEqual(corrected('a0', 'foo', 'bar'), 'a3')
+        # assert uses lastest slug
+        self.assertEqual(corrected('a0', 'foo', 'bar', 'xyzzy'), 'a3')
+        # assert ignores nonexistent ones in general
+        self.assertEqual(corrected('a0', 'foo', 'poop', 'bar', 'xyzzy'), 'a3')
+
+    def test_always_uses_original_slug(self):
+        utils._corrections_cache = {
+            'all': {
+                'a0': 'a1',
+            },
+            'foo': {
+                'a0': 'a2',
+                'a1': 'b1',
+            },
+            'bar': {
+                'a0': 'a3',
+                'b1': 'c1',
+            },
+        }
+        self.assertEqual(corrected('a0'), 'a1')
+        self.assertEqual(corrected('a0', 'foo'), 'a2')
+        self.assertEqual(corrected('a0', 'foo', 'bar'), 'a3')
 
 
 class SlugifyTest(unittest.TestCase):
