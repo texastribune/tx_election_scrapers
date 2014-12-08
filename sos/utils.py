@@ -3,6 +3,13 @@ from __future__ import unicode_literals
 import re
 import unicodedata
 
+import yaml
+
+
+GLOBAL_SLUG_PATH = 'corrections/all.yml'
+
+_all_cache = None
+
 
 def slugify(text):
     """
@@ -10,12 +17,19 @@ def slugify(text):
 
     Reference: https://github.com/django/django/blob/stable/1.7.x/django/utils/text.py
     """
+    global _all_cache
+    if _all_cache is None:
+        try:
+            _all_cache = yaml.load(open(GLOBAL_SLUG_PATH, 'rb'))
+        except IOError:  # no such file
+            _all_cache = {}
     try:
         text = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode('ascii')
     except TypeError:  # `text` was not unicode to begin with
         pass
     text = re.sub('[^\w\s-]', '', text).strip().lower()
-    return re.sub('[-\s]+', '-', text)
+    slug = re.sub('[-\s]+', '-', text)
+    return _all_cache.get(slug, slug)
 
 
 def int_ish(numeric_maybe):
