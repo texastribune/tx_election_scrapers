@@ -14,29 +14,35 @@ CORRECTIONS_DIR = 'corrections'
 _corrections_cache = {}
 
 
-def corrected(slug, *corrections):
+def corrected(slug, corrections=None):
     """
     Pull the corrected version of `slug` from `corrections`.
 
-    Corrections should be in increasing specificity.
+    Corrections should be in increasing specificity. Each correction should
+    correspond to a .yml file in the ./corrections directory that contains the
+    slug corrections.
     """
     # global _corrections_cache  # implied because {} is mutable
 
-    corrections = ['all'] + list(corrections)
-    for correction in corrections:
-        if correction not in _corrections_cache:
+    if corrections is None:
+        lookups = ['all']
+    else:
+        lookups = ['all'] + list(corrections)
+    for lookup in lookups:
+        if lookup not in _corrections_cache:
+            # WISHLIST lookup can also be a file handle
             try:
-                path = '{}.yml'.format(os.path.join(CORRECTIONS_DIR, correction))
-                _corrections_cache[correction] = yaml.load(open(path, 'rb'))
+                path = '{}.yml'.format(os.path.join(CORRECTIONS_DIR, lookup))
+                _corrections_cache[lookup] = yaml.load(open(path, 'rb'))
             except IOError:  # no slugifyuch file
-                _corrections_cache[correction] = {}
+                _corrections_cache[lookup] = {}
     new_slug = slug
-    for correction in corrections:
-        new_slug = _corrections_cache[correction].get(slug, new_slug)
+    for lookup in lookups:
+        new_slug = _corrections_cache[lookup].get(slug, new_slug)
     return new_slug
 
 
-def slugify(text, *corrections):
+def slugify(text, corrections=None):
     """
     Slugify text according to the same rules as Django's slugify.
 
@@ -48,7 +54,7 @@ def slugify(text, *corrections):
         pass
     text = re.sub('[^\w\s-]', '', text).strip().lower()
     slug = re.sub('[-\s]+', '-', text)
-    return corrected(slug, *corrections)
+    return corrected(slug, corrections)
 
 
 def int_ish(numeric_maybe):
