@@ -55,13 +55,13 @@ def coerce_types(obj):
             obj[k] = int(v.replace(',', ''))
 
 
-def coerce_votes(obj):
+def coerce_votes(obj, corrections_lookup):
     """Changes CSV-like dict to a list of results and coerce values."""
     new_results = []
     for name, count in obj.items():
         new_results.append({
             'name': name,
-            'slug': slugify(name),
+            'slug': slugify(name, corrections=corrections_lookup),
             'votes': int_ish(count)
         })
     new_results.sort(key=lambda x: x['votes'], reverse=True)
@@ -71,20 +71,21 @@ def coerce_votes(obj):
 def interpret(data):
     """Modify `data` in place according to `options`."""
     data['election_slug'] = slugify(data['election'])
-    data['slug'] = slugify(data['name'])
+    corrections_lookup = (data['election_slug'], )
+    data['slug'] = slugify(data['name'], corrections=corrections_lookup)
     # interpret data['candidates']
     for candidate in data['candidates']:
         # modify in place
-        candidate['slug'] = slugify(' '.join(candidate['name']))
+        candidate['slug'] = slugify(' '.join(candidate['name']), corrections=corrections_lookup)
 
     # interpret data['rows']
     for row in data['rows']:
         voting_results = row.pop('results')
         results_early = row.pop('results_early', None)
         coerce_types(row)
-        row['results'] = coerce_votes(voting_results)
+        row['results'] = coerce_votes(voting_results, corrections_lookup)
         if results_early is not None:
-            row['results_early'] = coerce_votes(results_early)
+            row['results_early'] = coerce_votes(results_early, corrections_lookup)
 
         # new data
         fips_key = row['name'].replace(' ', '')
