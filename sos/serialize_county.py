@@ -113,18 +113,17 @@ def process_race(doc):
     }
 
 
-def output_races(races):
-    # TODO indent amount from command line
-    json.dump(races, sys.stdout, indent=2)
-    # writer = UnicodeWriter(sys.stdout)
-
-
 def process(fh):
-    html_file = fh.read()
+    """Take a file-like object or text and process it."""
+    if hasattr(fh, 'read'):
+        html_file = fh.read()
+    else:
+        html_file = fh
     doc = document_fromstring(html_file)
-    results = process_race(doc)
-    output_races(results)
+    return process_race(doc)
 
 
 if __name__ == '__main__':
-    process(sys.stdin)
+    # TODO process `--indent` option
+    data = process(sys.stdin)
+    json.dump(data, sys.stdout, indent=2)
