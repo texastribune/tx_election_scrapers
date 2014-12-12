@@ -38,7 +38,7 @@ def interpret(data):
     else:
         result_keys = ('name', 'party', 'votes', 'percent')
     for race in rows:
-        race['slug'] = slugify(race['name'])
+        race['slug'] = slugify(race['name'], corrections=[data['slug']])
         new_results = []
 
         # candidate results
@@ -51,7 +51,8 @@ def interpret(data):
                 candidate_result['incumbent'] = True
             else:
                 candidate_result['incumbent'] = False
-            candidate_result['slug'] = slugify(candidate_result['name'])
+            candidate_result['slug'] = slugify(
+                candidate_result['name'], corrections=[data['slug']])
             candidate_result['votes'] = int_ish(candidate_result['votes'])
             if 'votes_early' in candidate_result:
                 candidate_result['votes_early'] = int_ish(candidate_result['votes_early'])
