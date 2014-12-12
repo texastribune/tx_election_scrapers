@@ -69,12 +69,6 @@ def process_race(race):
     }
 
 
-def output_races(races):
-    # TODO indent amount from command line
-    json.dump(races, sys.stdout, indent=2)
-    # writer = UnicodeWriter(sys.stdout)
-
-
 def process(fh):
     """Take a file-like object or text and process it."""
     if hasattr(fh, 'read'):
