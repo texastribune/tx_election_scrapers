@@ -75,7 +75,7 @@ def output_races(races):
     # writer = UnicodeWriter(sys.stdout)
 
 
-def process(fh, outputter=output_races):
+def process(fh):
     html_file = fh.read()
     doc = document_fromstring(html_file)
     races = bundle_races(doc)
@@ -85,9 +85,10 @@ def process(fh, outputter=output_races):
     data = get_meta(doc)
     data['total_rows'] = len(results)
     data['rows'] = results
-    outputter(data)
     return data
 
 
 if __name__ == '__main__':
-    process(sys.stdin)
+    # TODO process `--indent` option
+    data = process(sys.stdin)
+    json.dump(data, sys.stdout, indent=2)
