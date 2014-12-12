@@ -12,25 +12,7 @@ import sys
 
 from lxml.html import document_fromstring
 
-
-class Bucket(list):
-    """A helper for constructing list of lists one element at a time"""
-    def __init__(self, *args):
-        super(Bucket, self).__init__(*args)
-        self.advance()
-
-    def drip(self, o):
-        """appends the object to the current mini-bucket"""
-        self[-1].append(o)
-
-    def advance(self):
-        """create a new mini-bucket"""
-        self.append([])
-
-    def soft_advance(self):
-        """create a new mini-bucket only if there's something new"""
-        if self[-1]:
-            self.advance()
+from utils import Bucket
 
 
 def bundle_races(doc):
