@@ -3,8 +3,8 @@ from __future__ import unicode_literals
 import unittest
 
 
-from utils import slugify, corrected
-import utils
+from .utils import slugify, corrected
+from . import utils
 
 
 class correctedTest(unittest.TestCase):

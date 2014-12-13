@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 import os
 import unittest
 
-import serialize_statewide
+from . import serialize_statewide
 
 
 BASE_DIR = os.path.dirname(__file__)

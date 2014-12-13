@@ -12,7 +12,7 @@ import sys
 
 from lxml.html import document_fromstring
 
-from utils import Bucket
+from tx_elections_scrapers.sos.utils import Bucket
 
 
 def bundle_races(doc):
