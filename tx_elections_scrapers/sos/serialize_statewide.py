@@ -12,7 +12,7 @@ import sys
 
 from lxml.html import document_fromstring
 
-from utils import Bucket
+from tx_elections_scrapers.sos.utils import Bucket
 
 
 def bundle_races(doc):
@@ -86,7 +86,11 @@ def process(fh):
     return data
 
 
-if __name__ == '__main__':
-    # TODO process `--indent` option
+def main():
     data = process(sys.stdin)
+    # TODO process `--indent` option
     json.dump(data, sys.stdout, indent=2)
+
+
+if __name__ == '__main__':
+    main()

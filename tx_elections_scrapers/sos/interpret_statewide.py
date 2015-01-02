@@ -23,7 +23,7 @@ import re
 import sys
 
 from docopt import docopt
-from utils import int_ish, slugify
+from tx_elections_scrapers.sos.utils import int_ish, slugify
 
 
 INCUMBENT_PATTERN = re.compile(r'\s(\-\s|\()Incumbent\)?|\(I\)$')

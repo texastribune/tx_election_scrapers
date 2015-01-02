@@ -31,8 +31,8 @@ import sys
 
 from docopt import docopt
 
-from fips import FIPS
-from utils import slugify, int_ish
+from tx_elections_scrapers.sos.fips import FIPS
+from tx_elections_scrapers.sos.utils import slugify, int_ish
 
 
 INT_FIELDS = [

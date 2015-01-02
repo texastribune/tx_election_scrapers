@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 import os
 import unittest
 
-import serialize_county
+from . import serialize_county
 
 
 BASE_DIR = os.path.dirname(__file__)

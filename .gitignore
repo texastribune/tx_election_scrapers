@@ -1,9 +1,16 @@
 *.pyc
 
-# fuck
+# ugh
 .DS_Store
 
 
 # debugging helpers
 *.ipynb
 .ipynb_checkpoints/
+
+
+# created during packaging
+*.egg-info
+build/
+dist/
+MANIFEST
