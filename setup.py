@@ -21,6 +21,11 @@ setup(
             'interpret_statewide = tx_elections_scrapers.sos.interpret_statewide:main',
         ],
     },
+    install_requires=[
+        'PyYAML',
+        'docopt',
+        'lxml',
+    ],
     license='Apache License, Version 2.0',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
