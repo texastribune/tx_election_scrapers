@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name='tx_elections_scrapers',
     description='Scrapers for Texas elections results',
-    long_description=open('README.md').read(),
+    long_description=open('README.rst').read(),
     version='0.0.0',
     author='The Texas Tribune',
     author_email='tech@texastribune.org',

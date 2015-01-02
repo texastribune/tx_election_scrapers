@@ -1,5 +1,9 @@
+Texas Elections Scrapers
+========================
+
 Hi. This is just me fooling around trying to come up a better way to scrape
-election results.
+election results. The tricky logic has been refined in other Texas Tribune
+projects, but they were deeply tied to other logic.
 
 The idea is to split the process up into multiple logical steps that other
 people might find useful:
@@ -12,5 +16,5 @@ people might find useful:
 3. Interpret the serialized output: Turns the raw serialized data into
    something you might expect to see from a nice API.
 
-This is born from our internal elections scrapers, which attempted to do all
-three of those at once and caused much pain.
+In a Extract, transform, load (ETL) process, this just covers the extractions,
+with support for minor transforming.
