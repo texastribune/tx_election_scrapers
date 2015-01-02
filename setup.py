@@ -18,5 +18,7 @@ setup(
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
     ],
 )
