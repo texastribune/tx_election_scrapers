@@ -13,6 +13,14 @@ setup(
     # use `find_packages` to make it easier to add modules in the future
     packages=find_packages(exclude=('test_*', )),
     include_package_data=True,  # automatically include things from MANIFEST.in
+    entry_points={
+        'console_scripts': [
+            'serialize_county = tx_elections_scrapers.sos.serialize_county:main',
+            'serialize_statewide = tx_elections_scrapers.sos.serialize_statewide:main',
+            'interpret_county = tx_elections_scrapers.sos.interpret_county:main',
+            'interpret_statewide = tx_elections_scrapers.sos.interpret_statewide:main',
+        ],
+    },
     license='Apache License, Version 2.0',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',

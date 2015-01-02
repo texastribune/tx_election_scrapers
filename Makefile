@@ -1,3 +1,4 @@
+APP=tx_elections_scrapers
 VERSION=0.0.0
 
 
@@ -6,6 +7,7 @@ help:
 	@echo "  make help    - this help"
 	@echo "  make clean   - remove temporary files in .gitignore"
 	@echo "  make test    - run test suite"
+	@echo "  make install - install this package"
 	@echo "  make release - drop and recreate the database"
 
 clean:
@@ -20,6 +22,12 @@ clean:
 
 test:
 	python -m unittest discover
+
+
+# makes it easier to test setup.py's entry points
+install:
+	-pip uninstall $(APP) --yes
+	pip install .
 
 # Release Instructions:
 #

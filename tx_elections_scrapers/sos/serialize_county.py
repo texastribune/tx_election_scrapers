@@ -123,7 +123,11 @@ def process(fh):
     return process_race(doc)
 
 
-if __name__ == '__main__':
-    # TODO process `--indent` option
+def main():
     data = process(sys.stdin)
+    # TODO process `--indent` option
     json.dump(data, sys.stdout, indent=2)
+
+
+if __name__ == '__main__':
+    main()
