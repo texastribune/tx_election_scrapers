@@ -90,15 +90,15 @@ class StatewideSummaryTest(unittest.TestCase):
         self.assertEqual(race['data'][-1], ['AGAINST', '', '422,338', '18.95%',
             '812,197', '20.21%'])
 
-    def test_process_takes_file(self):
+    def test_serialize_takes_file(self):
         html_file = open(os.path.join(BASE_DIR, 'support/nov04_175_state.htm'))
-        data = serialize_statewide.process(html_file)
+        data = serialize_statewide.serialize(html_file)
         self.assertEqual(data['total_rows'], 160)
         self.assertEqual(data['election'], '2014 General Election')
 
-    def test_process_takes_text(self):
+    def test_serialize_takes_text(self):
         html_file = open(os.path.join(BASE_DIR, 'support/nov04_175_state.htm'))
-        data = serialize_statewide.process(html_file.read())
+        data = serialize_statewide.serialize(html_file.read())
         self.assertEqual(data['total_rows'], 160)
         self.assertEqual(data['election'], '2014 General Election')
 

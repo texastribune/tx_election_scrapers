@@ -69,8 +69,8 @@ def process_race(race):
     }
 
 
-def process(fh):
-    """Take a file-like object or text and process it."""
+def serialize(fh):
+    """Take a file-like object or text and serialize it."""
     if hasattr(fh, 'read'):
         html_file = fh.read()
     else:
@@ -87,7 +87,7 @@ def process(fh):
 
 
 def main():
-    data = process(sys.stdin)
+    data = serialize(sys.stdin)
     # TODO process `--indent` option
     json.dump(data, sys.stdout, indent=2)
 
