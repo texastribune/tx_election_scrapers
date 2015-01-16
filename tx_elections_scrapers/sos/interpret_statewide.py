@@ -22,6 +22,7 @@ import json
 import re
 import sys
 
+from dateutil.parser import parse
 from docopt import docopt
 from tx_elections_scrapers.sos.utils import int_ish, slugify
 
@@ -30,13 +31,20 @@ INCUMBENT_PATTERN = re.compile(r'\s(\-\s|\()Incumbent\)?|\(I\)$')
 
 
 def interpret(data):
+    """
+    Interpret the raw serialized data in-place.
+    """
     data['slug'] = slugify(data['election'])
     rows = data['rows']
 
     if data['type'] == 'realtime':
         result_keys = ('name', 'party', 'votes_early', 'percent_early', 'votes', 'percent')
+        date_string = data['updated_at'].rsplit('\u00a0', 2)[1]
+        data['updated_at'] = parse(date_string).isoformat()
     else:
         result_keys = ('name', 'party', 'votes', 'percent')
+        date_string = data['updated_at']
+        data['updated_at'] = parse(date_string).isoformat()
     for race in rows:
         race['slug'] = slugify(race['name'], corrections=[data['slug']])
         new_results = []

@@ -25,6 +25,7 @@ setup(
         'PyYAML',
         'docopt',
         'lxml',
+        'dateutil',
     ],
     license='Apache License, Version 2.0',
     classifiers=[
