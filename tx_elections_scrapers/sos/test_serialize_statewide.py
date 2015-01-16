@@ -11,13 +11,13 @@ BASE_DIR = os.path.dirname(__file__)
 
 class StatewideSummaryTest(unittest.TestCase):
     def test_bundle_races_works(self):
-        html_file = open(os.path.join(BASE_DIR, 'support/2012_general.html')).read()
+        html_file = open(os.path.join(BASE_DIR, 'support/hs-2012_general.html')).read()
         doc = serialize_statewide.document_fromstring(html_file)
         races = serialize_statewide.bundle_races(doc)
         self.assertEqual(len(races), 584)
 
     def test_get_meta_works_historical(self):
-        html_file = open(os.path.join(BASE_DIR, 'support/2012_general.html')).read()
+        html_file = open(os.path.join(BASE_DIR, 'support/hs-2012_general.html')).read()
         doc = serialize_statewide.document_fromstring(html_file)
         meta = serialize_statewide.get_meta(doc)
         self.assertEqual(meta['type'], 'historical')
@@ -25,7 +25,7 @@ class StatewideSummaryTest(unittest.TestCase):
         self.assertIn('11/6/2012', meta['updated_at'])
 
     def test_get_meta_works_realtime(self):
-        html_file = open(os.path.join(BASE_DIR, 'support/may29_160_state.htm')).read()
+        html_file = open(os.path.join(BASE_DIR, 'support/rs-2012_rep_primary.htm')).read()
         doc = serialize_statewide.document_fromstring(html_file)
         meta = serialize_statewide.get_meta(doc)
         self.assertEqual(meta['type'], 'realtime')
@@ -33,7 +33,7 @@ class StatewideSummaryTest(unittest.TestCase):
         self.assertIn('5/23/2012  12:57:00 PM', meta['updated_at'])
 
     def test_process_races_works_historical(self):
-        html_file = open(os.path.join(BASE_DIR, 'support/2012_general.html')).read()
+        html_file = open(os.path.join(BASE_DIR, 'support/hs-2012_general.html')).read()
         doc = serialize_statewide.document_fromstring(html_file)
         races = serialize_statewide.bundle_races(doc)
         race = serialize_statewide.process_race(races[0])
@@ -43,7 +43,7 @@ class StatewideSummaryTest(unittest.TestCase):
         self.assertEqual(race['metadata'][0], ['Race Total', '7,993,851', ''])
 
     def test_process_races_works_realtime(self):
-        html_file = open(os.path.join(BASE_DIR, 'support/may29_160_state.htm')).read()
+        html_file = open(os.path.join(BASE_DIR, 'support/rs-2012_rep_primary.htm')).read()
         doc = serialize_statewide.document_fromstring(html_file)
         races = serialize_statewide.bundle_races(doc)
         race = serialize_statewide.process_race(races[0])
@@ -53,7 +53,7 @@ class StatewideSummaryTest(unittest.TestCase):
         self.assertEqual(race['metadata'][0], ['Race Total', '', '0', '', '0', ''])
 
     def test_process_races_finds_party_historical(self):
-        html_file = open(os.path.join(BASE_DIR, 'support/2012_general.html')).read()
+        html_file = open(os.path.join(BASE_DIR, 'support/hs-2012_general.html')).read()
         doc = serialize_statewide.document_fromstring(html_file)
         races = serialize_statewide.bundle_races(doc)
 
@@ -72,7 +72,7 @@ class StatewideSummaryTest(unittest.TestCase):
         self.assertEqual(race['data'][-1], ['Joe Brown(I)', 'REP', '32,160', '100.00%'])
 
     def test_process_races_finds_party_realtime(self):
-        html_file = open(os.path.join(BASE_DIR, 'support/nov04_175_state.htm')).read()
+        html_file = open(os.path.join(BASE_DIR, 'support/rs-2014_general.htm')).read()
         doc = serialize_statewide.document_fromstring(html_file)
         races = serialize_statewide.bundle_races(doc)
 
@@ -90,15 +90,15 @@ class StatewideSummaryTest(unittest.TestCase):
         self.assertEqual(race['data'][-1], ['AGAINST', '', '422,338', '18.95%',
             '812,197', '20.21%'])
 
-    def test_process_takes_file(self):
-        html_file = open(os.path.join(BASE_DIR, 'support/nov04_175_state.htm'))
-        data = serialize_statewide.process(html_file)
+    def test_serialize_takes_file(self):
+        html_file = open(os.path.join(BASE_DIR, 'support/rs-2014_general.htm'))
+        data = serialize_statewide.serialize(html_file)
         self.assertEqual(data['total_rows'], 160)
         self.assertEqual(data['election'], '2014 General Election')
 
-    def test_process_takes_text(self):
-        html_file = open(os.path.join(BASE_DIR, 'support/nov04_175_state.htm'))
-        data = serialize_statewide.process(html_file.read())
+    def test_serialize_takes_text(self):
+        html_file = open(os.path.join(BASE_DIR, 'support/rs-2014_general.htm'))
+        data = serialize_statewide.serialize(html_file.read())
         self.assertEqual(data['total_rows'], 160)
         self.assertEqual(data['election'], '2014 General Election')
 

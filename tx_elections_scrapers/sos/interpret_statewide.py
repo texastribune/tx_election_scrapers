@@ -13,8 +13,8 @@ consume.
 Expects JSON from serialize_statewide.py.
 
 Sample:
-  cat support/2010_general.html | ./serialize_statewide.py | ./interpret_statewide.py
-  cat support/2012_general.html | ./serialize_statewide.py | ./interpret_statewide.py
+  cat support/hs-2014_general.html | ./serialize_statewide.py | ./interpret_statewide.py
+  cat support/rs-2014_general.htm | ./serialize_statewide.py | ./interpret_statewide.py
 """
 from __future__ import unicode_literals
 
@@ -22,21 +22,34 @@ import json
 import re
 import sys
 
+from dateutil.parser import parse
 from docopt import docopt
 from tx_elections_scrapers.sos.utils import int_ish, slugify
 
 
 INCUMBENT_PATTERN = re.compile(r'\s(\-\s|\()Incumbent\)?|\(I\)$')
+PARTY_SLUGS = ('republican', 'democratic')  # slurrrrmmmm
 
 
 def interpret(data):
+    """
+    Interpret the raw serialized data in-place.
+    """
     data['slug'] = slugify(data['election'])
     rows = data['rows']
 
     if data['type'] == 'realtime':
         result_keys = ('name', 'party', 'votes_early', 'percent_early', 'votes', 'percent')
+        date_string = data['updated_at'].rsplit('\u00a0', 2)[1]
+        data['updated_at'] = parse(date_string).isoformat()
     else:
         result_keys = ('name', 'party', 'votes', 'percent')
+        date_string = data['updated_at']
+        data['updated_at'] = parse(date_string).isoformat()
+    # Find party if this is a primary. Based on the template the SoS uses, it's
+    # the second word.
+    party = data['slug'].split('-', 3)[1]
+    data['party'] = party if party in PARTY_SLUGS else None
     for race in rows:
         race['slug'] = slugify(race['name'], corrections=[data['slug']])
         new_results = []
