@@ -13,8 +13,8 @@ consume.
 Expects JSON from serialize_statewide.py.
 
 Sample:
-  cat support/2010_general.html | ./serialize_statewide.py | ./interpret_statewide.py
-  cat support/2012_general.html | ./serialize_statewide.py | ./interpret_statewide.py
+  cat support/hs-2014_general.html | ./serialize_statewide.py | ./interpret_statewide.py
+  cat support/rs-2014_general.htm | ./serialize_statewide.py | ./interpret_statewide.py
 """
 from __future__ import unicode_literals
 

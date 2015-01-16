@@ -11,9 +11,8 @@ BASE_DIR = os.path.dirname(__file__)
 
 
 class RealtimeTest(unittest.TestCase):
-
     def test_it_works(self):
-        html_file = open(os.path.join(BASE_DIR, 'support/nov04_175_state.htm'))
+        html_file = open(os.path.join(BASE_DIR, 'support/rs-2014_general.htm'))
         data = serialize_statewide.serialize(html_file)
         # sanity check
         self.assertEqual(data['total_rows'], 160)
@@ -26,7 +25,7 @@ class RealtimeTest(unittest.TestCase):
 
 class HistoricalTest(unittest.TestCase):
     def test_it_works(self):
-        html_file = open(os.path.join(BASE_DIR, 'support/2012_general.html'))
+        html_file = open(os.path.join(BASE_DIR, 'support/hs-2012_general.html'))
         data = serialize_statewide.serialize(html_file)
         # sanity check
         self.assertEqual(data['total_rows'], 584)

@@ -12,7 +12,7 @@ BASE_DIR = os.path.dirname(__file__)
 
 class RealtimeCountyTest(unittest.TestCase):
     def test_it_works(self):
-        html_file = open(os.path.join(BASE_DIR, 'support/july31_162_race0_county.htm')).read()
+        html_file = open(os.path.join(BASE_DIR, 'support/rc-2012_rep_runoff_senate.htm')).read()
         doc = serialize_county.document_fromstring(html_file)
         results = serialize_county.process_race(doc)
         results2 = interpret_county.interpret(results)
@@ -22,7 +22,7 @@ class RealtimeCountyTest(unittest.TestCase):
 
 class HistoricalCountyTest(unittest.TestCase):
     def test_it_works(self):
-        html_file = open(os.path.join(BASE_DIR, 'support/2014_special_sd28_county.html')).read()
+        html_file = open(os.path.join(BASE_DIR, 'support/hc-2014_special_sd28.html')).read()
         doc = serialize_county.document_fromstring(html_file)
         results = serialize_county.process_race(doc)
         results2 = interpret_county.interpret(results)
