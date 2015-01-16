@@ -36,7 +36,7 @@ install:
 #
 # If this doesn't work, make sure you have wheels installed:
 #     pip install wheel
-release:
+release: clean
 	@sed -i -r /version/s/[0-9.]+/$(VERSION)/ setup.py
 	@git commit -am "bump version to v$(VERSION)"
 	@git tag v$(VERSION)
