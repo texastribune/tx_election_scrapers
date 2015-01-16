@@ -28,6 +28,7 @@ from tx_elections_scrapers.sos.utils import int_ish, slugify
 
 
 INCUMBENT_PATTERN = re.compile(r'\s(\-\s|\()Incumbent\)?|\(I\)$')
+PARTY_SLUGS = ('republican', 'democratic')  # slurrrrmmmm
 
 
 def interpret(data):
@@ -45,6 +46,10 @@ def interpret(data):
         result_keys = ('name', 'party', 'votes', 'percent')
         date_string = data['updated_at']
         data['updated_at'] = parse(date_string).isoformat()
+    # Find party if this is a primary. Based on the template the SoS uses, it's
+    # the second word.
+    party = data['slug'].split('-', 3)[1]
+    data['party'] = party if party in PARTY_SLUGS else None
     for race in rows:
         race['slug'] = slugify(race['name'], corrections=[data['slug']])
         new_results = []

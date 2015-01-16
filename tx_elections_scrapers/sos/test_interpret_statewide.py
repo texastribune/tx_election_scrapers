@@ -55,5 +55,23 @@ class ParsingTest(unittest.TestCase):
             data = interpret_statewide.interpret(serialize_statewide.serialize(html_file))
             self.assertEqual(data['updated_at'], updated_at)
 
+    def test_party(self):
+        mapping = (
+            ('hs-2010_general.html', None),
+            ('hs-2010_rep_runoff.html', 'republican'),
+            ('hs-2011_special_runoff_hd14.html', None),
+            ('hs-2012_general.html', None),
+            ('hs-2014_general.html', None),
+            ('rs-2010_dem_primary.htm', 'democratic'),
+            ('rs-2010_rep_primary.htm', 'republican'),
+            ('rs-2012_dem_primary.htm', 'democratic'),
+            ('rs-2012_rep_primary.htm', 'republican'),
+            ('rs-2014_general.htm', None),
+        )
+        for election, party in mapping:
+            html_file = open(os.path.join(BASE_DIR, 'support', election))
+            data = interpret_statewide.interpret(serialize_statewide.serialize(html_file))
+            self.assertEqual(data['party'], party)
+
 if __name__ == '__main__':
     unittest.main()
