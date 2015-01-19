@@ -36,21 +36,25 @@ class SosFunctionalTest(unittest.TestCase):
 
     def test_county(self):
         mapping = (
-            ('hc-2010_general_governor.html', 255),
-            ('hc-2012_general_president.html', 255),
-            ('hc-2012_rep_primary.html', 255),
-            ('hc-2014_special_sd28.html', 52),
-            ('rc-2012_dem_runoff_sd137.htm', 1),  # FIXME
-            ('rc-2012_rep_runoff_rr.htm', 255),  # FIXME
-            ('rc-2012_rep_runoff_senate.htm', 255),  # FIXME
-            ('rc-2014_general_cd1.html', 13),  # FIXME
-            ('rc-2014_general_gov_county.html', 255),
-            ('rc-2014_general_senate.html', 255),
+            # election, reference
+            ('hc-2010_general_governor.html', (255, 5)),
+            ('hc-2012_general_president.html', (255, 11)),
+            ('hc-2012_rep_primary.html', (255, 8)),
+            ('hc-2014_special_sd28.html', (52, 6)),
+            ('rc-2012_dem_runoff_sd137.htm', (1, 2)),
+            ('rc-2012_rep_runoff_rr.htm', (255, 2)),
+            ('rc-2012_rep_runoff_senate.htm', (255, 2)),
+            ('rc-2014_general_cd1.html', (13, 2)),
+            ('rc-2014_general_gov_county.html', (255, 5)),
+            ('rc-2014_general_senate.html', (255, 5)),
         )
-        for election, row_count in mapping:
+        for election, reference in mapping:
             html_file = open(os.path.join(BASE_DIR, 'support', election))
             data = county(html_file)
-            self.assertEqual(len(data['rows']), row_count)
+            # print election
+            num_counties, num_candidates = reference
+            self.assertEqual(len(data['rows']), num_counties)
+            self.assertEqual(len(data['candidates']), num_candidates)
 
 
 if __name__ == '__main__':
