@@ -20,9 +20,17 @@ clean:
 	rm -rf dist
 	rm -rf MANIFEST
 
-test:
+# kind of does a lot, but I want to make sure the CLI tools work too
+test: install
 	python -m unittest discover
-
+	cat tx_elections_scrapers/sos/support/hs-2010_general.html | \
+	  serialize_statewide | interpret_statewide > /dev/null
+	cat tx_elections_scrapers/sos/support/rs-2012_rep_primary.htm | \
+	  serialize_statewide | interpret_statewide > /dev/null
+	cat tx_elections_scrapers/sos/support/hc-2014_special_sd28.html | \
+	  serialize_county | interpret_county > /dev/null
+	cat tx_elections_scrapers/sos/support/rc-2014_general_senate.html | \
+	  serialize_county | interpret_county > /dev/null
 
 # makes it easier to test setup.py's entry points
 install:

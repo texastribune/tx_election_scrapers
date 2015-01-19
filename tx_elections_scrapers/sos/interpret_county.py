@@ -49,7 +49,7 @@ INT_FIELDS = [
 def coerce_types(obj):
     """Modifies dict in-place to coerce values."""
     for k, v in obj.items():
-        if v == 'N/A':
+        if v == 'N/A' or v is None:
             obj[k] = None
         elif k in INT_FIELDS:
             obj[k] = int(v.replace(',', ''))

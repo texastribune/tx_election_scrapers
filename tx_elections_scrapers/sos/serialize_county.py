@@ -32,13 +32,13 @@ def county_to_cells(county):
 
 def process_county_historical(county, candidates):
     data = county.getchildren()
-    name = data[0].text_content()
+    county_name = data[0].text_content()
     results = {}
     for idx, candidate in enumerate(candidates, start=1):
         results[candidate] = data[idx].text_content()
 
     return {
-        'name': name,
+        'name': county_name,
         'total_votes': data[-3].text_content(),
         'registered_voters': data[-2].text_content(),
         'turnout': data[-1].text_content(),
@@ -85,10 +85,12 @@ def process_race(doc):
         race_name = ''.join(doc.xpath('//form/text()')).strip()
         is_historical = True
 
-    extra_cols = 3 if is_historical else 6
+    row_one = [x.text for x in rows[0].getchildren()]
+    # first column that's not '...' counting from the right
+    extra_cols = [x == '...' for x in reversed(row_one)].index(False)
 
     # candidates
-    first_names = [x.text for x in rows[0].getchildren()[1:-extra_cols]]  # non-surname
+    first_names = row_one[1:-extra_cols]  # non-surname
     surnames = [x.text for x in rows[1].getchildren()[1:-extra_cols]]
     parties = [x.text for x in rows[2].getchildren()[1:-extra_cols]]
     candidates = [{'name': x[:2], 'party': x[2]} for x in zip(first_names, surnames, parties)]
@@ -109,6 +111,7 @@ def process_race(doc):
         'name': race_name,
         'candidates': candidates,
         'rows': county_data,
+        'total_rows': len(county_data),
         'type': 'historical' if is_historical else 'realtime',
     }
 

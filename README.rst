@@ -1,6 +1,9 @@
 Texas Elections Scrapers
 ========================
 
+.. image:: https://travis-ci.org/texastribune/tx_election_scrapers.svg
+    :target: https://travis-ci.org/texastribune/tx_election_scrapers
+
 Hi. This is just me fooling around trying to come up a better way to scrape
 election results. The tricky logic has been refined in other Texas Tribune
 projects, but they were deeply tied to other logic.
