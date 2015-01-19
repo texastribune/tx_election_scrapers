@@ -1,0 +1,13 @@
+language: python
+install: "pip install -r requirements.txt --download-cache $HOME/.pip-cache"
+script: "make test"
+# Enable pip download cache for faster builds, caching site-packages does not
+# seem to work :(
+# http://docs.travis-ci.com/user/caching/
+# http://stackoverflow.com/questions/19422229/how-to-cache-requirements-for-a-django-project-on-travis-ci/19460794#19460794
+cache:
+  directories:
+    - $HOME/.pip-cache/
+# Enable faster container-based builds
+# http://blog.travis-ci.com/2014-12-17-faster-builds-with-container-based-infrastructure/
+sudo: false
