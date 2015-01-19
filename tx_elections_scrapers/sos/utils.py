@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+import datetime
 import os
 import re
 import unicodedata
@@ -93,3 +94,12 @@ def int_ish(numeric_maybe):
     if numeric_maybe == '':
         return None
     return int(numeric_maybe.replace(',', ''))
+
+
+def dthandler(obj):
+    """
+    JSON handler for datetime objects.
+
+    http://stackoverflow.com/questions/455580/json-datetime-between-python-and-javascript/2680060#2680060
+    """
+    return obj.isoformat() if isinstance(obj, datetime.datetime) or isinstance(obj, datetime.date) else None
