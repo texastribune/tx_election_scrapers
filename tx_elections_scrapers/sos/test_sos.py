@@ -40,10 +40,10 @@ class SosFunctionalTest(unittest.TestCase):
             ('hc-2012_general_president.html', 255),
             ('hc-2012_rep_primary.html', 255),
             ('hc-2014_special_sd28.html', 52),
-            # ('rc-2012_dem_runoff_sd137.htm', 255),  # FIXME
-            # ('rc-2012_rep_runoff_rr.htm', 255),  # FIXME
-            # ('rc-2012_rep_runoff_senate.htm', 255),  # FIXME
-            # ('rc-2014_general_cd1.html', 255),  # FIXME
+            ('rc-2012_dem_runoff_sd137.htm', 1),  # FIXME
+            ('rc-2012_rep_runoff_rr.htm', 255),  # FIXME
+            ('rc-2012_rep_runoff_senate.htm', 255),  # FIXME
+            ('rc-2014_general_cd1.html', 13),  # FIXME
             ('rc-2014_general_gov_county.html', 255),
             ('rc-2014_general_senate.html', 255),
         )
