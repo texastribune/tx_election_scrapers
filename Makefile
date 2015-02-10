@@ -37,6 +37,13 @@ install:
 	-pip uninstall $(APP) --yes
 	pip install .
 
+
+# Set the version. Done this way to avoid fancy, brittle Python import magic
+version:
+	@sed -i -r /version/s/[0-9.]+/$(VERSION)/ setup.py
+	@sed -i -r /version/s/[0-9.]+/$(VERSION)/ tx_elections_scrapers/__init__.py
+
+
 # Release Instructions:
 #
 # 1. bump version number at the top of this file
@@ -44,8 +51,7 @@ install:
 #
 # If this doesn't work, make sure you have wheels installed:
 #     pip install wheel
-release: clean
-	@sed -i -r /version/s/[0-9.]+/$(VERSION)/ setup.py
+release: clean version
 	@git commit -am "bump version to v$(VERSION)"
 	@git tag v$(VERSION)
 	python setup.py sdist bdist_wheel upload
