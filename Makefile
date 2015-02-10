@@ -48,10 +48,8 @@ version:
 #
 # 1. bump version number at the top of this file
 # 2. `make release`
-#
-# If this doesn't work, make sure you have wheels installed:
-#     pip install wheel
 release: clean version
 	@git commit -am "bump version to v$(VERSION)"
 	@git tag v$(VERSION)
+	@-pip install wheel > /dev/null
 	python setup.py sdist bdist_wheel upload
