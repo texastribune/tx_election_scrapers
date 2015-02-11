@@ -22,10 +22,7 @@ def bundle_races(doc):
     # Separate the rows into sets of rows for each race.
     races = Bucket()
     for row in rows:
-        if row.xpath('.//th'):
-            # skip headers
-            continue
-        elif row.xpath('.//td[1]/text()[contains(., "----")]'):
+        if row.xpath('.//td[1]/text()[contains(., "----")]'):
             # separator encountered
             races.advance()
         else:
@@ -47,12 +44,25 @@ def get_meta(doc):
 
 
 def process_race(race):
-    """Extract meaning from a collection of TR elements about a race."""
-    race_name = race[0].text_content()
+    """
+    Extract meaning from a collection of TR elements about a race.
+
+    Returns the extracted name of the race, the header row (if it exists), the
+    raw result data above the `----`, the raw meta data below the `----`.
+
+    For historical results, the header row is only on the first race.
+    """
+    race_name = race[1].text_content()
     tabular_data = []
     meta_data = []
     in_meta = False
-    for row in race[1:]:
+    if race[0].xpath('.//th'):
+        header = [x.text_content().strip() for x in race[0].getchildren()]
+        start_idx = 2
+    else:
+        header = None
+        start_idx = 1
+    for row in race[start_idx:]:
         cells = row.getchildren()
         datum = [x.text_content().strip() for x in cells[1:]]
         if in_meta:
@@ -64,6 +74,7 @@ def process_race(race):
         tabular_data.append(datum)
     return {
         'name': race_name,
+        'header': header,
         'data': tabular_data,
         'metadata': meta_data,
     }

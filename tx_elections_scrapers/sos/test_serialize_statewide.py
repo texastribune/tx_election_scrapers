@@ -38,9 +38,16 @@ class StatewideSummaryTest(unittest.TestCase):
         races = serialize_statewide.bundle_races(doc)
         race = serialize_statewide.process_race(races[0])
         self.assertEqual(race['name'], 'President/Vice-President')
+        # assert the first race gets headers
+        self.assertEqual(race['header'], ['RACE', 'NAME', 'PARTY', 'CANVASS VOTES', 'PERCENT'])
         self.assertEqual(len(race['data']), 11)
         self.assertEqual(len(race['metadata']), 1)
         self.assertEqual(race['metadata'][0], ['Race Total', '7,993,851', ''])
+
+        race = serialize_statewide.process_race(races[1])
+        # assert subsequent race get no header
+        self.assertEqual(race['header'], None)
+        self.assertEqual(race['data'][0][0], 'Ted Cruz')
 
     def test_process_races_works_realtime(self):
         html_file = open(os.path.join(BASE_DIR, 'support/rs-2012_rep_primary.htm')).read()
@@ -48,6 +55,8 @@ class StatewideSummaryTest(unittest.TestCase):
         races = serialize_statewide.bundle_races(doc)
         race = serialize_statewide.process_race(races[0])
         self.assertEqual(race['name'], 'President/Vice-President')
+        self.assertEqual(race['header'], ['RACE', 'NAME', '', 'DELEGATES',
+            'EARLY VOTES', 'PERCENT', 'TOTAL VOTES', 'PERCENT'])
         self.assertEqual(len(race['data']), 9)
         self.assertEqual(len(race['metadata']), 5)
         self.assertEqual(race['metadata'][0], ['Race Total', '', '0', '', '0', ''])

@@ -39,19 +39,26 @@ def interpret(data):
     rows = data['rows']
 
     if data['type'] == 'realtime':
-        result_keys = ('name', 'party', 'votes_early', 'percent_early', 'votes', 'percent')
+        result_keys = ['name', 'party', 'votes_early', 'percent_early', 'votes', 'percent']
         date_string = data['updated_at'].rsplit('\u00a0', 2)[1]
         data['updated_at'] = parse(date_string)
+        check_presidential = True
     else:
         result_keys = ('name', 'party', 'votes', 'percent')
         date_string = data['updated_at']
         data['updated_at'] = parse(date_string)
+        check_presidential = False
     # Find party if this is a primary. Based on the template the SoS uses, it's
     # the second word.
     party = data['election'].split()[1].lower()
     data['party'] = party if party in PARTY_SLUGS else None
     for race in rows:
         race['slug'] = slugify(race['name'], corrections=[data['slug']])
+        header = race.pop('header')
+        # modify result_keys to support presidential races
+        if check_presidential:
+            # replace 'party' with 'delegates'
+            result_keys[1] = 'delegates' if 'DELEGATES' in header else 'party'
         new_results = []
 
         # candidate results
@@ -69,6 +76,8 @@ def interpret(data):
             candidate_result['votes'] = int_ish(candidate_result['votes'])
             if 'votes_early' in candidate_result:
                 candidate_result['votes_early'] = int_ish(candidate_result['votes_early'])
+            if 'delegates' in candidate_result:
+                candidate_result['delegates'] = int_ish(candidate_result['delegates'])
             new_results.append(candidate_result)
 
         # metadata
