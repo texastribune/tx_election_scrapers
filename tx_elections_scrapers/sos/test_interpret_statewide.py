@@ -57,7 +57,7 @@ class ParsingTest(unittest.TestCase):
             data = interpret_statewide.interpret(serialize_statewide.serialize(html_file))
             self.assertEqual(data['updated_at'], updated_at)
 
-    def test_party(self):
+    def test_party_works(self):
         mapping = (
             ('hs-2010_general.html', None),
             ('hs-2010_rep_runoff.html', 'republican'),

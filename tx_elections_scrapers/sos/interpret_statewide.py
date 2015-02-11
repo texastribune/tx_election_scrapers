@@ -48,7 +48,7 @@ def interpret(data):
         data['updated_at'] = parse(date_string)
     # Find party if this is a primary. Based on the template the SoS uses, it's
     # the second word.
-    party = data['slug'].split('-', 3)[1]
+    party = data['election'].split()[1].lower()
     data['party'] = party if party in PARTY_SLUGS else None
     for race in rows:
         race['slug'] = slugify(race['name'], corrections=[data['slug']])
