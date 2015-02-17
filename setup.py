@@ -4,7 +4,7 @@ setup(
     name='tx_elections_scrapers',
     description='Scrapers for Texas elections results',
     long_description=open('README.rst').read(),
-    version='0.4.0',
+    version='0.4.1',
     author='The Texas Tribune',
     author_email='tech@texastribune.org',
     maintainer='Chris Chang',
